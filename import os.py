@@ -2,7 +2,8 @@ import os
 import re
 
 nombre_archivo = "archivo.txt"
-ruta_archivo = "C:/Users/Wuux/Desktop/Compiladores" 
+ruta_archivo = "C:/Users/Rafael/OneDrive/Escritorio/EjercicioCompiExamen/CursoCompiladores"
+# ruta_archivo = "C:/Users/Wuux/Desktop/Compiladores" 
 ruta_completa = os.path.join(ruta_archivo, nombre_archivo)
 
 # Integrantes Wilson Peñate y Eddison Rafael

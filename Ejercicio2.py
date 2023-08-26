@@ -31,7 +31,7 @@ def tokenize_java_code(java_code):
         "?", ":", "=", "op=", ","
     }
     delimiters = {";", ",", "(", ")", "{", "}", "[", "]"}
-    comments = {"//", "/*", "*/", "/**"}
+    comments = {"//", "/", "/", "/**"}
 
     tokens = []
     line_number = 1  # Mantenemos el número de línea actual
@@ -135,7 +135,8 @@ def tokenize_java_code(java_code):
     return tokens, identifiers, literals
 
 nombre_archivo = "evaluadores.txt"
-ruta_archivo = "C:/Users/Wuux/Desktop/Compiladores"  # Coloca la ruta correcta aquí
+# ruta_archivo = "C:/Users/Wuux/Desktop/Compiladores"  # Coloca la ruta correcta aquí
+ruta_archivo = "C:/Users/Rafael/OneDrive/Escritorio/EjercicioCompiExamen/CursoCompiladores"
 ruta_completa = os.path.join(ruta_archivo, nombre_archivo)
 
 if os.path.exists(ruta_completa):

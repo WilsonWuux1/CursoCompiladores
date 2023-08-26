@@ -48,7 +48,8 @@ def tokenize(input_str):
 # Resto del código
 
 nombre_archivo = "numeros.txt"  # Nombre del archivo
-ruta_archivo = "C:/Users/Wuux/Desktop/Compiladores"  # Ruta del archivo
+ruta_archivo = "C:/Users/Rafael/OneDrive/Escritorio/EjercicioCompiExamen/CursoCompiladores"
+# ruta_archivo = "C:/Users/Wuux/Desktop/Compiladores"  # Ruta del archivo
 ruta_completa = os.path.join(ruta_archivo, nombre_archivo)  # Combina la ruta y el nombre del archivo
 
 if os.path.exists(ruta_completa):
