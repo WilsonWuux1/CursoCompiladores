@@ -1,24 +1,9 @@
-#include <iostream>
-using namespace std;
+public class TestCalculation {
+    public static void main(String[] args) {
+        int x = 10;
+        int y = 20;
+        int result = x + y;
 
-
-int main()
-{
-   char respuesta;
-   do
-   {
-      int num1, num2, resultado;
-     
-      num1 = 10;
-      num2 = 20;
-
-      resultado = num1 + num2;
-
-      cout << num1 << "+" << num2 << "=" << resultado << endl;
-
-      cout << "\nDesea realizar una nueva operacion?\n"
-            << "Conteste s o S para continuar.\n"
-            << "Respuesta: ";
-      cin >> respuesta;
-   } while (respuesta == 's' || respuesta == 'S');
+        System.out.println( result) 
+    }
 }

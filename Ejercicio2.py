@@ -1,58 +1,162 @@
 import os
 import re
 
-def tokenize_cpp_code(cpp_code):
-    keywords = {"while", "if", "return", "cout", "cin"}  # Palabras clave
-    special_symbols = {"(", ")", "[", "]", "{", "}"}  # Símbolos especiales
-    operators = {"*", "+", "-", "/", "%"}  # Operadores
-    logical_operators = {"&&", "||", ">", "<", "==", "!="}  # Operadores lógicos
+def is_valid_decimal(token):    
+    parts = token.split('.')
+    return len(parts) == 2 and all(part.isdigit() for part in parts)
+
+def tokenize_java_code(java_code):
+    keywords = { 
+        "while", "if", "return", "cout", "cin",
+        "abstract", "continue", "for", "new", "switch",
+        "boolean", "default", "goto", "null", "synchronized",
+        "break", "do", "package", "this",
+        "byte", "double", "implements", "private", "threadsafe",
+        "byvalue", "else", "import", "protected", "throw",
+        "case", "extends", "instanceof", "public", "transient",
+        "catch", "false", "int", "true",
+        "char", "final", "interface", "short", "try",
+        "class", "finally", "long", "static", "void",
+        "const", "float", "native", "super", "while",
+        "cast", "future", "generic", "inner", "operator",
+        "outer", "rest", "var"
+    }
+    identifiers = set()
+    literals = set()
+    operators = {
+        ".","++", "--", "!", "~", "instanceof",
+        "*", "/", "%", "+", "-",
+        "<<", ">>", ">>>", "<", ">", "<=", ">=", "==", "!=",
+        "&", "^", "|", "&&", "||", "[]",
+        "?", ":", "=", "op=", ","
+    }
+    delimiters = {";", ",", "(", ")", "{", "}", "[", "]"}
+    comments = {"//", "/*", "*/", "/**"}
 
     tokens = []
-    lines = cpp_code.split('\n')
+    line_number = 1  # Mantenemos el número de línea actual
+    for line in java_code.split('\n'):
 
-    for line in lines:
-        line = line.strip()
-        if line.startswith("#include"):
-            continue
-        for word in re.findall(r'\w+|\S', line):
+        for word in re.findall(r'\w+|[^\w\s]+|".*?"', line):
+        #    print("Processing word:", word)
             if word in keywords:
-                tokens.append(("palabras claves", word))
-            elif word in special_symbols:
-                tokens.append(("simbolos especiales", word))
+                tokens.append(("Keyword", word,line_number))
             elif word in operators:
-                tokens.append(("operadores", word))
-            elif word in logical_operators:
-                tokens.append(("operadores logicos", word))
+                # tokens.append(("Operator", word))
+                if word == "+":
+                    token_type = "SIGNO_MAS"
+                elif word == "-":
+                    token_type = "SIGNO_MENOS"
+                elif word == "*":
+                    token_type = "SIGNO_MULTIPLICACION"
+                elif word == "/":
+                    token_type = "SIGNO_DIVISION"
+                elif word == ".":
+                    token_type = "PUNTO"
+                elif word == "++":
+                    token_type = "INCREMENTO"
+                elif word == "--":
+                    token_type = "DECREMENTO"
+                elif word == "!":
+                    token_type = "NOT"
+                elif word == "~":
+                    token_type = "COMPLEMENTO"
+                elif word == "instanceof":
+                    token_type = "INSTANCEOF"
+                elif word == "<<":
+                    token_type = "DESPLAZAMIENTO_IZQUIERDO"
+                elif word == ">>":
+                    token_type = "DESPLAZAMIENTO_DERECHO"
+                elif word == ">>>":
+                    token_type = "DESPLAZAMIENTO_DERECHO_SIN_SIGNO"
+                elif word == "<<<":
+                    token_type = "DESPLAZAMIENTO_IZQUIERDO_SIN_SIGNO"
+                elif word == "<":
+                    token_type = "MENOR_QUE"
+                elif word == ">":
+                    token_type = "MAYOR_QUE"
+                elif word == ">=":
+                    token_type = "MENOR_O_IGUAL_QUE"
+                elif word == "<=":
+                    token_type = "MAYOR_O_IGUAL_QUE"
+                elif word == "==":
+                    token_type = "IGUAL"
+                elif word == "!=":
+                    token_type = "NO_IGUAL"
+                elif word == "&":
+                    token_type = "AND_BIT_A_BIT"
+                elif word == "^":
+                    token_type = "XOR_BIT_A_BIT"
+                elif word == "|":
+                    token_type = "OR_BIT_A_BIT"
+                elif word == "&&":
+                    token_type = "AND_LOGICO"
+                elif word == "||":
+                    token_type = "OR_LOGICO"
+                elif word == "?":
+                    token_type = "OPERADOR_TERNARIO"
+                elif word == ":":
+                    token_type = "DOS_PUNTOS"
+                elif word == "=":
+                    token_type = "ASIGNACION"
+                elif word == "op=":
+                    token_type = "OPERADOR_ASIGNACION"
+                elif word == ",":
+                    token_type = "COMA"
+                elif word == "[]":
+                    token_type = "DOBLE_CORCHETE"
+                else:
+                    token_type = "ERROR"
+                tokens.append((token_type, word, line_number))
+            elif word in delimiters:
+                tokens.append(("Delimiter", word,line_number))
             elif re.match(r'^[a-zA-Z_]\w*$', word):
-                tokens.append(("identificadores", word))
+                identifiers.add(word)
+                tokens.append(("Identifier", word,line_number))
+            elif re.match(r"[0-9]+\.[0-9]+", word):
+                if is_valid_decimal(word):
+                    tokens.append(("NUMERO_DECIMAL", word, line_number))
+                else:
+                    tokens.append(("ERROR_DECIMAL", word, line_number))
+            elif re.match(r"[0-9]+", word):
+                
+                tokens.append(("NUMERO_ENTERO", word, line_number))
+            elif re.match(r'^\d+\.\d+$', word):
+                 literals.add(word)
+                 tokens.append(("Float Literal", word,line_number))
+            elif re.match(r'"[^"]*"', word):
+                 literals.add(word)
+                 tokens.append(("String Literal", word,line_number))
+            else:
+                raise ValueError(f"Unrecognized token: '{word}'")
 
-    return tokens
+            line_number += 1
+
+    return tokens, identifiers, literals
 
 nombre_archivo = "evaluadores.txt"
-ruta_archivo =  "C:/Users/Wuux/Desktop/Compiladores"  # Coloca la ruta correcta aquí
+ruta_archivo = "C:/Users/Wuux/Desktop/Compiladores"  # Coloca la ruta correcta aquí
 ruta_completa = os.path.join(ruta_archivo, nombre_archivo)
 
 if os.path.exists(ruta_completa):
     archivo = open(ruta_completa, "r", encoding="utf-8")
-    cpp_code = archivo.read()
+    java_code = archivo.read()
     archivo.close()
 
-    tokens = tokenize_cpp_code(cpp_code)
-    
-    categories = {
-        "palabras claves": set(),
-        "identificadores": set(),
-        "operadores": set(),
-        "operadores logicos": set(),
-        "simbolos especiales": set()
-    }
-    
-    for token_type, token_value in tokens:
-        if token_type in categories:
-            categories[token_type].add(token_value)
-    
-    for category, values in categories.items():
-        print(f"{category:20} {', '.join(values)}")
+    try:
+        tokens, identifiers, literals = tokenize_java_code(java_code)
 
+        categories = {
+            "Identificadores": identifiers,
+            "Literales": literals
+        }
+
+        for token_type, token_value, line_number in tokens:
+            print(f"{token_type:20} {token_value:10} Linea: {line_number}")
+
+        for category, values in categories.items():
+            print(f"{category}: {', '.join(values)}")
+    except ValueError as e:
+        print("Error:", e)
 else:
     print("El archivo no existe.")
