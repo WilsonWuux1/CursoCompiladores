@@ -1,12 +1,14 @@
-public class TestCalculation {
-    public static void main(String[] args) {
+public class SumaArreglo {
+    public static void main ( String[] args ) {
+        double[] numeros = { 2.5, 4.8, 1.2, 3.7, 5.1 } 
 
-        int x.gteFecha = 100000000;
-        int x = 0xDC00;
-        int boo = true;
-        int var = 20.22 ;
-        int result = 0;
+        
+        double resultado = 0.30.40 ;
 
-        System.out.println( result) 
+        for ( int i = 0; i < numeros.length; i++ ) {
+            resultado + numeros[i] ;
+        }
+
+        System.out.println ( + resultado ) ;
     }
 }
