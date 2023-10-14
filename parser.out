@@ -1,0 +1,152 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> class_declaration
+Rule 2     program -> program class_declaration
+Rule 3     class_declaration -> CLASS ID LBRACE class_body RBRACE
+Rule 4     class_body -> statement main
+Rule 5     class_body -> class_body statement
+Rule 6     class_body -> main
+Rule 7     class_body -> statement class_body
+Rule 8     main -> PUBLIC STATIC VOID MAIN LPAREN ID LBRACKET RBRACKET ARGS RPAREN LBRACE statements RBRACE
+Rule 9     statement -> assignment
+Rule 10    statement -> array_usage
+Rule 11    statement -> print_statement
+Rule 12    statement -> dcl_variable SEMI
+Rule 13    statement -> for_statement
+Rule 14    statement -> if_statement
+Rule 15    expression -> ID
+Rule 16    expression -> NUMBER
+Rule 17    expression -> ID EQUALS propiedades
+Rule 18    expression -> ID GT propiedades
+Rule 19    expression -> ID GE propiedades
+Rule 20    expression -> ID LE propiedades
+Rule 21    expression -> ID LT propiedades
+Rule 22    expression -> NOT expression
+Rule 23    condicion -> ID EQUALS NUMBER
+Rule 24    condicion -> ID GT NUMBER
+Rule 25    condicion -> ID GE NUMBER
+Rule 26    condicion -> ID LE NUMBER
+Rule 27    condicion -> ID LT NUMBER
+Rule 28    condicion -> ID AND NUMBER
+Rule 29    condicion -> ID OR NUMBER
+Rule 30    condicion -> NUMBER EQUALS NUMBER
+Rule 31    condicion -> NUMBER GT NUMBER
+Rule 32    condicion -> NUMBER GE NUMBER
+Rule 33    condicion -> NUMBER LE NUMBER
+Rule 34    condicion -> NUMBER LT NUMBER
+Rule 35    condicion -> ID AND ID
+Rule 36    condicion -> ID OR ID
+Rule 37    condicion -> ID EQ ID
+Rule 38    condicion -> ID EQ STRING_LITERAL
+Rule 39    increment_or_decrement -> ID INCREMENT
+Rule 40    increment_or_decrement -> ID DECREMENT
+Rule 41    for_statement -> FOR LPAREN INT ID EQUALS NUMBER SEMI condicion SEMI increment_or_decrement RPAREN LBRACE statements RBRACE
+Rule 42    for_statement -> FOR LPAREN INT ID EQUALS NUMBER SEMI expression SEMI increment_or_decrement RPAREN LBRACE statements RBRACE
+Rule 43    for_statement -> FOR LPAREN tipo_palabra ID COLON ID RPAREN LBRACE statements RBRACE
+Rule 44    if_statement -> IF LPAREN condicion RPAREN LBRACE statements RBRACE
+Rule 45    if_statement -> IF LPAREN condicion RPAREN LBRACE statements RBRACE ELSE statements
+Rule 46    if_statement -> IF LPAREN condicion RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE
+Rule 47    args -> arg
+Rule 48    args -> args arg
+Rule 49    arg -> ID
+Rule 50    arg -> STRING_LITERAL
+Rule 51    arg -> NUMBER
+Rule 52    arg -> NOT arg
+Rule 53    arg -> ID COMMA
+Rule 54    arg -> STRING_LITERAL COMMA
+Rule 55    arg -> NUMBER COMMA
+Rule 56    propiedades -> ID PUNTO ID
+Rule 57    statements -> statement
+Rule 58    statements -> statements statement
+Rule 59    assignment -> ID EQUALS expression SEMI
+Rule 60    dcl_variable -> tipo_number ID EQUALS NUMBER
+Rule 61    dcl_variable -> tipo_palabra ID EQUALS STRING_LITERAL
+Rule 62    dcl_variable -> tipo_booleano ID EQUALS valor_boolean
+Rule 63    tipo_booleano -> BOOLEAN
+Rule 64    tipo_number -> INT
+Rule 65    tipo_number -> DOUBLE
+Rule 66    tipo_palabra -> STRING
+Rule 67    valor_boolean -> TRUE
+Rule 68    valor_boolean -> FALSE
+Rule 69    array_usage -> tipo_number LBRACKET RBRACKET ID EQUALS LBRACE args RBRACE SEMI
+Rule 70    array_usage -> tipo_palabra LBRACKET RBRACKET ID EQUALS LBRACE args RBRACE SEMI
+Rule 71    print_statement -> SYSTEM PUNTO OUT PUNTO PRINTLN LPAREN STRING_LITERAL RPAREN SEMI
+Rule 72    print_statement -> SYSTEM PUNTO OUT PUNTO PRINTLN LPAREN ID RPAREN SEMI
+Rule 73    print_statement -> SYSTEM PUNTO OUT PUNTO PRINTLN LPAREN ID LBRACKET ID RBRACKET RPAREN SEMI
+Rule 74    empty -> <empty>
+
+Terminals, with rules where they appear
+
+AND                  : 28 35
+BOOLEAN              : 63
+CLASS                : 3
+COLON                : 43
+COMMA                : 53 54 55
+DECREMENT            : 40
+DOUBLE               : 65
+ELSE                 : 45 46
+EQUALS               : 17 23 30 41 42 59 60 61 62 69 70
+FALSE                : 68
+FOR                  : 41 42 43
+GE                   : 19 25 32
+GT                   : 18 24 31
+ID                   : 3 8 15 17 18 19 20 21 23 24 25 26 27 28 29 35 35 36 36 37 37 38 39 40 41 42 43 43 49 53 56 56 59 60 61 62 69 70 72 73 73
+IF                   : 44 45 46
+INCREMENT            : 39
+INT                  : 41 42 64
+LBRACE               : 3 8 41 42 43 44 45 46 46 69 70
+LBRACKET             : 8 69 70 73
+LE                   : 20 26 33
+LPAREN               : 8 41 42 43 44 45 46 71 72 73
+LT                   : 21 27 34
+MAIN                 : 8
+NOT                  : 22 52
+NUMBER               : 16 23 24 25 26 27 28 29 30 30 31 31 32 32 33 33 34 34 41 42 51 55 60
+OR                   : 29 36
+OUT                  : 71 72 73
+PRINTLN              : 71 72 73
+PUBLIC               : 8
+PUNTO                : 56 71 71 72 72 73 73
+RBRACE               : 3 8 41 42 43 44 45 46 46 69 70
+RBRACKET             : 8 69 70 73
+RPAREN               : 8 41 42 43 44 45 46 71 72 73
+SEMI                 : 12 41 41 42 42 59 69 70 71 72 73
+STATIC               : 8
+STRING_LITERAL       : 38 50 54 61 71
+SYSTEM               : 71 72 73
+TRUE                 : 67
+VOID                 : 8
+error                : 
+
+Nonterminals, with rules where they appear
+
+ARGS                 : 8
+EQ                   : 37 38
+STRING               : 66
+arg                  : 47 48 52
+args                 : 48 69 70
+array_usage          : 10
+assignment           : 9
+class_body           : 3 5 7
+class_declaration    : 1 2
+condicion            : 41 44 45 46
+dcl_variable         : 12
+empty                : 
+expression           : 22 42 59
+for_statement        : 13
+if_statement         : 14
+increment_or_decrement : 41 42
+main                 : 4 6
+print_statement      : 11
+program              : 2 0
+propiedades          : 17 18 19 20 21
+statement            : 4 5 7 57 58
+statements           : 8 41 42 43 44 45 45 46 46 58
+tipo_booleano        : 62
+tipo_number          : 60 69
+tipo_palabra         : 43 61 70
+valor_boolean        : 62
+
