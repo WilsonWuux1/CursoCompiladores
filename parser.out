@@ -80,7 +80,15 @@ Rule 74    empty -> <empty>
 
 Terminals, with rules where they appear
 
+ID                   : 3 8 15 17 18 19 20 21 23 24 25 26 27 28 29 35 35 36 36 37 37 38 39 40 41 42 43 43 49 53 56 56 59 60 61 62 69 70 72 73 73
+LBRACE               : 3 8 41 42 43 44 45 46 46 69 70
+RBRACE               : 3 8 41 42 43 44 45 46 46 69 70
+error                : 
+
+Nonterminals, with rules where they appear
+
 AND                  : 28 35
+ARGS                 : 8
 BOOLEAN              : 63
 CLASS                : 3
 COLON                : 43
@@ -88,16 +96,15 @@ COMMA                : 53 54 55
 DECREMENT            : 40
 DOUBLE               : 65
 ELSE                 : 45 46
+EQ                   : 37 38
 EQUALS               : 17 23 30 41 42 59 60 61 62 69 70
 FALSE                : 68
 FOR                  : 41 42 43
 GE                   : 19 25 32
 GT                   : 18 24 31
-ID                   : 3 8 15 17 18 19 20 21 23 24 25 26 27 28 29 35 35 36 36 37 37 38 39 40 41 42 43 43 49 53 56 56 59 60 61 62 69 70 72 73 73
 IF                   : 44 45 46
 INCREMENT            : 39
 INT                  : 41 42 64
-LBRACE               : 3 8 41 42 43 44 45 46 46 69 70
 LBRACKET             : 8 69 70 73
 LE                   : 20 26 33
 LPAREN               : 8 41 42 43 44 45 46 71 72 73
@@ -110,22 +117,15 @@ OUT                  : 71 72 73
 PRINTLN              : 71 72 73
 PUBLIC               : 8
 PUNTO                : 56 71 71 72 72 73 73
-RBRACE               : 3 8 41 42 43 44 45 46 46 69 70
 RBRACKET             : 8 69 70 73
 RPAREN               : 8 41 42 43 44 45 46 71 72 73
 SEMI                 : 12 41 41 42 42 59 69 70 71 72 73
 STATIC               : 8
+STRING               : 66
 STRING_LITERAL       : 38 50 54 61 71
 SYSTEM               : 71 72 73
 TRUE                 : 67
 VOID                 : 8
-error                : 
-
-Nonterminals, with rules where they appear
-
-ARGS                 : 8
-EQ                   : 37 38
-STRING               : 66
 arg                  : 47 48 52
 args                 : 48 69 70
 array_usage          : 10
