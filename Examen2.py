@@ -4,6 +4,16 @@ import ply.lex as lex
 import ply.yacc as yacc
 import warnings
 
+# Examen parcial 2 
+# analizador lexico 
+# analizador sintactico
+# estructuras de analisis for e if 
+# almacenamiento de tokens
+
+
+# Presentado por Wilson Estuardo Peñate y Eddison Rafael Morales
+# Carnets 2100022 - 2000457
+
 warnings.filterwarnings("ignore")
 
 # Lista que almacenará los resultados del análisis léxico
