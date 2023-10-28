@@ -133,7 +133,7 @@ def t_INVALID_NUMBER(t):
 
 def t_NUMERO(t):
     r"\d+(\.\d+)?"
-    t.type = "NUMERO"
+    t.type = "NUMBER"
     t.value = float(t.value) if '.' in t.value else int(t.value)
     return t
 

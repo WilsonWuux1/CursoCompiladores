@@ -1,7 +1,17 @@
 public class HolaMundo {
 
-public static void main(String[] args) {		
-    System.out.println("Hola Mundo");
-}
+    public static void main(String[] args) {		
+        System.out.println("Hola Mundo");
+
+        if(5>3){
+            System.out.println("5>3");
+        }
+
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Hola Mundo");
+        }
+    }
 
 }
+
+
