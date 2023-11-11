@@ -235,14 +235,20 @@ def p_program(p):
     p[0] = ("program: ", p[1:])
 
 
-# Reglas de producción para declaración de la clase
-def p_class_declaration(p):
-    """
-    class_declaration : CLASS ID LBRACE class_body RBRACE
-    """
+# # Reglas de producción para declaración de la clase
+# def p_class_declaration(p):
+#     """
+#     class_declaration : CLASS ID LBRACE class_body RBRACE
+#     """
     
-    p[0] = ("class: ", p[4])
+#     p[0] = ("class: ", p[4])
 
+def p_class_declaration(p):
+    '''
+    class_declaration : CLASS ID LBRACE class_body RBRACE
+    '''
+    p[0] = ("class: ", p[4])
+    # Código para manejar la declaración de clase
 
 # Reglas de producción para el cuerpo de la clase
 def p_class_body(p):
@@ -257,10 +263,19 @@ def p_class_body(p):
 
 
 # Reglas de producción para el método main
-def p_main(p):
-    ''' main : PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ARGS RPAREN LBRACE statements RBRACE  '''
+# def p_main(p):
+#     ''' main : PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ARGS RPAREN LBRACE statements RBRACE  '''
     
+#     p[0] = ("main: ", p[12])
+
+
+def p_main(p):
+    '''
+    main : PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ARGS RPAREN LBRACE statements RBRACE
+    '''
     p[0] = ("main: ", p[12])
+    # Código para manejar el método main
+
 
 
 # Reglas de producción para sentencias
@@ -286,6 +301,7 @@ def p_expression(p):
                | ID LE propiedades
                | ID LT propiedades
                | NOT expression
+        
     """
     
     if len(p) == 4:
@@ -481,7 +497,9 @@ def p_empty(p):
 # Función de manejo de errores
 def p_error(p):
     if p:
-        print(f"Sintaxis incorrecta en la línea {p.lineno}: antes del token '{p.value}'")
+        print(f"Sintaxis incorrecta en '{p.value}' (línea {p.lineno})")
+    else:
+        print("Error de sintaxis en el código fuente")
 
 
 # --------------- Construcción del analizador sintáctico -------------------
@@ -516,21 +534,32 @@ def print_ast(node, level=0):
 
 
 
-# Función para llamar al análisis sintáctico
+# # Función para llamar al análisis sintáctico
+# def llamadaAnalizadorSintactico(source_code):
+#     # Llama al analizador sintáctico para analizar el código fuente
+#     result = parser.parse(source_code)
+
+#     # Comprueba si el resultado del análisis sintáctico no es None (indicando éxito)
+#     if result is not None:
+#         # Imprime un mensaje indicando que el análisis sintáctico fue exitoso
+#         print("Análisis sintáctico exitoso")
+
+#         # Imprime la representación del árbol de análisis sintáctico utilizando la función print_ast
+#         print_ast(result)
+#     else:
+#         # Imprime un mensaje indicando que hubo un error en el análisis sintáctico
+#         print("Error de análisis sintáctico")
+
 def llamadaAnalizadorSintactico(source_code):
-    # Llama al analizador sintáctico para analizar el código fuente
-    result = parser.parse(source_code)
-
-    # Comprueba si el resultado del análisis sintáctico no es None (indicando éxito)
-    if result is not None:
-        # Imprime un mensaje indicando que el análisis sintáctico fue exitoso
-        print("Análisis sintáctico exitoso")
-
-        # Imprime la representación del árbol de análisis sintáctico utilizando la función print_ast
-        print_ast(result)
-    else:
-        # Imprime un mensaje indicando que hubo un error en el análisis sintáctico
-        print("Error de análisis sintáctico")
+    try:
+        result = parser.parse(source_code)
+        if result is not None:
+            print("Análisis sintáctico exitoso")
+            print_ast(result)
+        else:
+            print("Error de análisis sintáctico")
+    except SyntaxError as e:
+        print(e)
 
 
 # ----------------- LÓGICA DE EJECUCIÓN ------------------------

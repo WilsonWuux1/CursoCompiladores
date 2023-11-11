@@ -4,8 +4,8 @@ public class HolaMundo {
         System.out.println("Hola Mundo");
         
         int numero = 10;
+        numero = 2;
 
-        numero = 23;
 
         if(5>3){
             System.out.println("5>3");
@@ -17,5 +17,3 @@ public class HolaMundo {
     }
 
 }
-
-
