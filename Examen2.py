@@ -120,6 +120,11 @@ t_SEMI = r';'
 t_COLON = r':'
 t_STRING_LITERAL = r'"[^"]*"'
 
+variables_declaradas = {}
+
+
+
+
 # Expresión regular para identificadores insensibles a mayúsculas y minúsculas
 def t_ID(t):
     r"[a-zA-Z_][a-zA-Z_0-9]*"
@@ -387,21 +392,37 @@ def p_statements(p):
 
 
 # Reglas de producción de asignación de valores a variables
-def p_assignment(p):
-    '''assignment : ID EQUALS expression SEMI'''
+# def p_assignment(p):
+#     '''assignment : ID EQUALS expression SEMI'''
     
+#     p[0] = (p[1], p[2], p[3], p[4])
+def p_assignment(p):
+    '''
+    assignment : ID EQUALS expression SEMI
+    '''
+    if p[1] not in variables_declaradas:
+        raise SyntaxError(f"Variable '{p[1]}' no declarada")
     p[0] = (p[1], p[2], p[3], p[4])
-
 
 # Reglas de producción de declaración de variables:
 # - Declaración de variables que contengan números
 # - Declaración de variables que contengan cadena
 # - Declaración de variables que contengan valor booleano
+# def p_dcl_variable(p):
+#     '''dcl_variable : tipo_number ID EQUALS NUMBER
+#                     | tipo_palabra ID EQUALS STRING_LITERAL
+#                     | tipo_booleano ID EQUALS valor_boolean'''
+    
+#     p[0] = (p[1], p[2], p[4])
 def p_dcl_variable(p):
     '''dcl_variable : tipo_number ID EQUALS NUMBER
                     | tipo_palabra ID EQUALS STRING_LITERAL
                     | tipo_booleano ID EQUALS valor_boolean'''
-    
+   
+    if p[2] in variables_declaradas:
+        raise SyntaxError(f"Variable '{p[2]}' ya declarada")
+    else:
+        variables_declaradas[p[2]] = True
     p[0] = (p[1], p[2], p[4])
 
 
@@ -564,8 +585,8 @@ def ejecucionAnalizador(nombre_archivo):
 # Principal
 def main():
     try:
-        # nombre_archivo = 'C:/Users/Wuux/Desktop/Compiladores/evaluadores.txt'
-        nombre_archivo = 'C:/Users/Rafael/OneDrive/Escritorio/EjercicioCompiExamen/CursoCompiladores/evaluadores.txt'
+        nombre_archivo = 'C:/Users/Wuux/Desktop/Compiladores/evaluadores.txt'
+        # nombre_archivo = 'C:/Users/Rafael/OneDrive/Escritorio/EjercicioCompiExamen/CursoCompiladores/evaluadores.txt'
         with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
             entrada = archivo.read()
             ejecutarALexico(entrada)
