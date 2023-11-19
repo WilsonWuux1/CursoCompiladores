@@ -4,7 +4,8 @@ public class HolaMundo {
         System.out.println("Hola Mundo");
         
         int numero = 10;
-        numero = 2;
+        
+        numero = 20;
 
 
         if(5>3){
