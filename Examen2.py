@@ -1,3 +1,6 @@
+import tkinter as tk
+from tkinter import filedialog, Text
+
 import sys
 import os
 import ply.lex as lex
@@ -235,14 +238,19 @@ def p_program(p):
     p[0] = ("program: ", p[1:])
 
 
-# Reglas de producción para declaración de la clase
-def p_class_declaration(p):
-    """
-    class_declaration : CLASS ID LBRACE class_body RBRACE
-    """
+# # Reglas de producción para declaración de la clase
+# def p_class_declaration(p):
+#     """
+#     class_declaration : CLASS ID LBRACE class_body RBRACE
+#     """
     
-    p[0] = ("class: ", p[4])
+#     p[0] = ("class: ", p[4])
 
+def p_class_declaration(p):
+    '''
+    class_declaration : PUBLIC CLASS ID LBRACE class_body RBRACE
+    '''
+    p[0] = ("class: ", p[5])
 
 # Reglas de producción para el cuerpo de la clase
 def p_class_body(p):
@@ -257,10 +265,19 @@ def p_class_body(p):
 
 
 # Reglas de producción para el método main
-def p_main(p):
-    ''' main : PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ARGS RPAREN LBRACE statements RBRACE  '''
+# def p_main(p):
+#     ''' main : PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ARGS RPAREN LBRACE statements RBRACE  '''
     
+#     p[0] = ("main: ", p[12])
+
+
+def p_main(p):
+    '''
+    main : PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ARGS RPAREN LBRACE statements RBRACE
+    '''
     p[0] = ("main: ", p[12])
+    # Código para manejar el método main
+
 
 
 # Reglas de producción para sentencias
@@ -286,6 +303,7 @@ def p_expression(p):
                | ID LE propiedades
                | ID LT propiedades
                | NOT expression
+        
     """
     
     if len(p) == 4:
@@ -481,7 +499,9 @@ def p_empty(p):
 # Función de manejo de errores
 def p_error(p):
     if p:
-        print(f"Sintaxis incorrecta en la línea {p.lineno}: antes del token '{p.value}'")
+        print(f"Sintaxis incorrecta en '{p.value}' (línea {p.lineno})")
+    else:
+        print("Error de sintaxis en el código fuente")
 
 
 # --------------- Construcción del analizador sintáctico -------------------
@@ -516,22 +536,46 @@ def print_ast(node, level=0):
 
 
 
-# Función para llamar al análisis sintáctico
-def llamadaAnalizadorSintactico(source_code):
-    # Llama al analizador sintáctico para analizar el código fuente
-    result = parser.parse(source_code)
+# # Función para llamar al análisis sintáctico
+# def llamadaAnalizadorSintactico(source_code):
+#     # Llama al analizador sintáctico para analizar el código fuente
+#     result = parser.parse(source_code)
 
-    # Comprueba si el resultado del análisis sintáctico no es None (indicando éxito)
-    if result is not None:
-        # Imprime un mensaje indicando que el análisis sintáctico fue exitoso
-        print("Análisis sintáctico exitoso")
+#     # Comprueba si el resultado del análisis sintáctico no es None (indicando éxito)
+#     if result is not None:
+#         # Imprime un mensaje indicando que el análisis sintáctico fue exitoso
+#         print("Análisis sintáctico exitoso")
 
-        # Imprime la representación del árbol de análisis sintáctico utilizando la función print_ast
-        print_ast(result)
+#         # Imprime la representación del árbol de análisis sintáctico utilizando la función print_ast
+#         print_ast(result)
+#     else:
+#         # Imprime un mensaje indicando que hubo un error en el análisis sintáctico
+#         print("Error de análisis sintáctico")
+def str_ast(node, level=0):
+    indentation = " " * level * 2
+    result_str = ""
+    if isinstance(node, tuple):
+        result_str += f"{indentation}{node[0]}\n"
+        for child in node[1:]:
+            result_str += str_ast(child, level + 1)
+    elif isinstance(node, list):
+        for child in node:
+            result_str += str_ast(child, level + 1)
     else:
-        # Imprime un mensaje indicando que hubo un error en el análisis sintáctico
-        print("Error de análisis sintáctico")
+        result_str += f"{indentation}{node}\n"
+    return result_str
 
+def llamadaAnalizadorSintactico(source_code):
+   
+        result = parser.parse(source_code)
+        if result is not None:
+            # En lugar de imprimir, construye una cadena con los resultados
+            resultado_str = "Análisis sintáctico exitoso\n"
+            resultado_str += str_ast(result)  # Asumiendo que tienes una función que convierte el AST en una cadena
+            return resultado_str
+        else:
+            return "Error de análisis sintáctico"
+    
 
 # ----------------- LÓGICA DE EJECUCIÓN ------------------------
 
@@ -585,8 +629,8 @@ def ejecucionAnalizador(nombre_archivo):
 # Principal
 def main():
     try:
-        nombre_archivo = 'C:/Users/Wuux/Desktop/Compiladores/evaluadores.txt'
-        # nombre_archivo = 'C:/Users/Rafael/OneDrive/Escritorio/EjercicioCompiExamen/CursoCompiladores/evaluadores.txt'
+        # nombre_archivo = 'C:/Users/Wuux/Desktop/Compiladores/evaluadores.txt'
+        nombre_archivo = 'C:/Users/Rafael/OneDrive/Escritorio/EjercicioCompiExamen/CursoCompiladores/evaluadores.txt'
         with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
             entrada = archivo.read()
             ejecutarALexico(entrada)
@@ -597,6 +641,36 @@ def main():
     except Exception as e:
         print(f"Ocurrió un error al analizar el archivo: {e}")
 
+def addApp():
+    filename = filedialog.askopenfilename(initialdir="/", title="Select File", filetypes=(("text files", "*.txt"), ("all files", "*.*")))
+    analyzeFile(filename)
+
+root = tk.Tk()
+root.title("COMPILADOR EDDISON Y WILSON")
+output = Text(root, height=20, width=100)
+output.pack()
+
+def analyzeFile(filename):
+    # Limpiar el widget de texto antes de mostrar nuevos resultados
+    output.delete(1.0, tk.END)
+    
+    with open(filename, 'r', encoding='utf-8') as archivo:
+        entrada = archivo.read()
+        resultadoLexico = ejecutar_analisis_lexico(entrada)
+        # Insertar los resultados del análisis léxico
+        for result in resultadoLexico:
+            output.insert(tk.END, result + "\n")
+        # Suponiendo que tienes una función que devuelve una cadena con los resultados del análisis sintáctico
+        resultadoSintactico = llamadaAnalizadorSintactico(entrada)
+        # Insertar los resultados del análisis sintáctico
+        output.insert(tk.END, "\nAnálisis Sintáctico:\n" + resultadoSintactico + "\n")
+
+
+openFile = tk.Button(root, text="CARGAR ARCHIVO", padx=10, pady=5, fg="white", bg="#263D42", command=addApp)
+openFile.pack()
+
+root.mainloop()
 
 if __name__ == "__main__":
     main()
+
