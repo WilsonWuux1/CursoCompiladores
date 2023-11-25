@@ -7,10 +7,10 @@ import ply.lex as lex
 import ply.yacc as yacc
 import warnings
 
-# Examen parcial 2 
-# analizador lexico 
+# Examen parcial 2
+# analizador lexico
 # analizador sintactico
-# estructuras de analisis for e if 
+# estructuras de analisis for e if
 # almacenamiento de tokens
 
 
@@ -174,28 +174,28 @@ lexer = lex.lex()
 def ejecutar_analisis_lexico(datos):
     # Accede a la variable global resultadoLexico
     global resultadoLexico
-    
+
     # Establece los datos de entrada para el analizador léxico (lexer)
     lexer.input(datos)
-    
+
     # Limpia la lista resultadoLexico antes de realizar el análisis
     resultadoLexico.clear()
-    
+
     # Bucle para obtener tokens mediante el analizador léxico
     while True:
         # Obtiene el siguiente token del analizador léxico
         tok = lexer.token()
-        
+
         # Si no hay más tokens, sale del bucle
         if not tok:
             break
-        
+
         # Crea una cadena de estado para el token actual
         estado = f"Tipo {tok.type} Valor {tok.value} Linea {tok.lineno} Posicion {tok.lexpos}"
-        
+
         # Agrega el estado a la lista resultadoLexico
         resultadoLexico.append(estado)
-    
+
     # Devuelve la lista de estados resultante del análisis léxico
     return resultadoLexico
 
@@ -234,7 +234,7 @@ def p_program(p):
     program : class_declaration
            | program class_declaration
     """
-    
+
     p[0] = ("program: ", p[1:])
 
 
@@ -243,7 +243,7 @@ def p_program(p):
 #     """
 #     class_declaration : CLASS ID LBRACE class_body RBRACE
 #     """
-    
+
 #     p[0] = ("class: ", p[4])
 
 def p_class_declaration(p):
@@ -255,19 +255,19 @@ def p_class_declaration(p):
 # Reglas de producción para el cuerpo de la clase
 def p_class_body(p):
     """
-    class_body : statement main 
+    class_body : statement main
                | class_body statement
                | main
                | statement class_body
     """
-    
+
     p[0] = ("body: ", p[1:])
 
 
 # Reglas de producción para el método main
 # def p_main(p):
 #     ''' main : PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET ARGS RPAREN LBRACE statements RBRACE  '''
-    
+
 #     p[0] = ("main: ", p[12])
 
 
@@ -288,8 +288,8 @@ def p_statement(p):
                 | dcl_variable SEMI
                 | for_statement
                 | if_statement'''
-    
-    p[0] = (p[1:]) 
+
+    p[0] = (p[1:])
 
 
 # Reglas de producción para expresiones
@@ -303,9 +303,9 @@ def p_expression(p):
                | ID LE propiedades
                | ID LT propiedades
                | NOT expression
-        
+
     """
-    
+
     if len(p) == 4:
         p[0] = (p[1], p[2], p[3])
     else:
@@ -328,9 +328,9 @@ def p_condicion(p):
                | NUMBER LT NUMBER
                | ID AND ID
                | ID OR ID
-               | ID EQ ID 
+               | ID EQ ID
                | ID EQ STRING_LITERAL '''
-    
+
     p[0] = ("condicion: ", p[1], p[2], p[3])
 
 
@@ -338,27 +338,27 @@ def p_condicion(p):
 def p_increment_or_decrement(p):
     ''' increment_or_decrement : ID INCREMENT
                                | ID DECREMENT '''
-    
+
     p[0] = ("increment or decrement: ", p[1], p[2])
 
-#Estructura FOR Reglas de producción para bucles for y for-each 
+#Estructura FOR Reglas de producción para bucles for y for-each
 def p_for_statement(p):
     ''' for_statement : FOR LPAREN INT ID EQUALS NUMBER SEMI condicion SEMI increment_or_decrement RPAREN LBRACE statements RBRACE
                       | FOR LPAREN INT ID EQUALS NUMBER SEMI expression SEMI increment_or_decrement RPAREN LBRACE statements RBRACE
                       | FOR LPAREN tipo_palabra ID COLON ID RPAREN LBRACE statements RBRACE'''
-    
-    p[0] = ("for:", p[1:]) 
+
+    p[0] = ("for:", p[1:])
 
 
 # Estructura IF Reglas de producción para sentencias if
 def p_if_statement(p):
     """
     if_statement : IF LPAREN condicion RPAREN LBRACE statements RBRACE
-                | IF LPAREN condicion RPAREN LBRACE statements RBRACE ELSE statements 
+                | IF LPAREN condicion RPAREN LBRACE statements RBRACE ELSE statements
                 | IF LPAREN condicion RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE
     """
-    
-    p[0] = (p[1:]) 
+
+    p[0] = (p[1:])
 
 
 # Reglas de producción para varios argumentos
@@ -367,7 +367,7 @@ def p_args(p):
     args : arg
          | args arg
     """
-    
+
     if len(p) == 2:
         p[0] = ["args: ", p[1]]
     else:
@@ -385,24 +385,24 @@ def p_arg(p):
          | STRING_LITERAL COMMA
          | NUMBER COMMA
     """
-    
+
     p[0] = ("arg: ", p[1])
 
 
 # Reglas de producción para propiedades de un objeto
 def p_propiedades(p):
     ''' propiedades : ID PUNTO ID'''
-    
+
     p[0] = ("propiedades", p[1], p[3])
 
 
 # Producción statements:
-# - Secuencia de declaraciones que pueden consistir en una sola declaración 
+# - Secuencia de declaraciones que pueden consistir en una sola declaración
 # - Secuencia de declaraciones compuesta por una secuencia existente de declaraciones seguida de una declaración adicional
 def p_statements(p):
     '''statements : statement
                   | statements statement'''
-    
+
     if len(p) == 2:
         p[0] = [p[1]]
     else:
@@ -412,7 +412,7 @@ def p_statements(p):
 # Reglas de producción de asignación de valores a variables
 # def p_assignment(p):
 #     '''assignment : ID EQUALS expression SEMI'''
-    
+
 #     p[0] = (p[1], p[2], p[3], p[4])
 def p_assignment(p):
     '''
@@ -430,13 +430,13 @@ def p_assignment(p):
 #     '''dcl_variable : tipo_number ID EQUALS NUMBER
 #                     | tipo_palabra ID EQUALS STRING_LITERAL
 #                     | tipo_booleano ID EQUALS valor_boolean'''
-    
+
 #     p[0] = (p[1], p[2], p[4])
 def p_dcl_variable(p):
     '''dcl_variable : tipo_number ID EQUALS NUMBER
                     | tipo_palabra ID EQUALS STRING_LITERAL
                     | tipo_booleano ID EQUALS valor_boolean'''
-   
+
     if p[2] in variables_declaradas:
         raise SyntaxError(f"Variable '{p[2]}' ya declarada")
     else:
@@ -447,7 +447,7 @@ def p_dcl_variable(p):
 # Reglas de producción de tipo_booleano
 def p_tipo_booleano(p):
     '''tipo_booleano : BOOLEAN'''
-    
+
     p[0] = ("type_boolean: ", p[1])
 
 
@@ -455,14 +455,14 @@ def p_tipo_booleano(p):
 def p_tipo_number(p):
     '''tipo_number : INT
                     | DOUBLE'''
-    
+
     p[0] = ("type_number: : ", p[1])
 
 
 # Reglas de producción de tipo_booleano
 def p_tipo_palabra(p):
     '''tipo_palabra : STRING'''
-    
+
     p[0] = ("type_string: ", p[1])
 
 
@@ -470,7 +470,7 @@ def p_tipo_palabra(p):
 def p_valor_boolean(p):
     '''valor_boolean : TRUE
                     | FALSE'''
-    
+
     p[0] = ("boolean: ", p[1])
 
 
@@ -478,7 +478,7 @@ def p_valor_boolean(p):
 def p_array_usage(p):
     '''array_usage : tipo_number LBRACKET RBRACKET ID EQUALS LBRACE args RBRACE SEMI
                     | tipo_palabra LBRACKET RBRACKET ID EQUALS LBRACE args RBRACE SEMI'''
-    
+
     p[0] = ("array_usage", p[1:])
 
 
@@ -487,7 +487,7 @@ def p_print_statement(p):
     '''print_statement : SYSTEM PUNTO OUT PUNTO PRINTLN LPAREN STRING_LITERAL RPAREN SEMI
                        | SYSTEM PUNTO OUT PUNTO PRINTLN LPAREN ID RPAREN SEMI
                        | SYSTEM PUNTO OUT PUNTO PRINTLN LPAREN ID LBRACKET ID RBRACKET RPAREN SEMI'''
-    
+
     p[0] = ('print_statement', p[7])
 
 
@@ -513,22 +513,22 @@ parser = yacc.yacc()
 def print_ast(node, level=0):
     # Crea una cadena de espacios en blanco para la indentación
     indentation = " " * level * 2
-    
+
     # Verifica si el nodo es una tupla (representando una producción gramatical)
     if isinstance(node, tuple):
         # Imprime el nombre del nodo (el primer elemento de la tupla)
         print(f"{indentation}{node[0]}")
-        
+
         # Recorre los hijos del nodo e imprime cada uno recursivamente
         for child in node[1:]:
             print_ast(child, level + 1)
-    
+
     # Verifica si el nodo es una lista
     elif isinstance(node, list):
         # Para cada elemento en la lista, imprime recursivamente
         for child in node:
             print_ast(child, level + 1)
-    
+
     # Si el nodo no es una tupla ni una lista, es un nodo terminal, como un identificador o un número
     else:
         # Imprime el nodo terminal con la indentación adecuada
@@ -566,7 +566,7 @@ def str_ast(node, level=0):
     return result_str
 
 def llamadaAnalizadorSintactico(source_code):
-   
+
         result = parser.parse(source_code)
         if result is not None:
             # En lugar de imprimir, construye una cadena con los resultados
@@ -575,7 +575,7 @@ def llamadaAnalizadorSintactico(source_code):
             return resultado_str
         else:
             return "Error de análisis sintáctico"
-    
+
 
 # ----------------- LÓGICA DE EJECUCIÓN ------------------------
 
@@ -603,10 +603,10 @@ def ejecutarALexico(entrada):
             # Escribe cada token en una línea del archivo
             for token in tokensValidos:
                 archivo.write(f"{token}\n")
-            
+
             # Imprime un mensaje indicando que los tokens se han almacenado en el archivo
             print(f"Los tokens se han almacenado en el archivo '{nombre_archivo}'.")
-        
+
         # Cierra el archivo automáticamente al salir del bloque 'with'
     except Exception as e:
         # Maneja excepciones en caso de errores durante la escritura del archivo
@@ -618,7 +618,7 @@ def ejecutarALexico(entrada):
 
 # Ejecuta el análisis sintáctico
 def ejecucionAnalizador(nombre_archivo):
-    
+
     with open(nombre_archivo, 'r') as archivo:
         codigo = archivo.read()
         archivo.close()
@@ -634,7 +634,7 @@ def main():
         with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
             entrada = archivo.read()
             ejecutarALexico(entrada)
-        
+
         ejecucionAnalizador(nombre_archivo)
     except FileNotFoundError:
         print(f"No se pudo encontrar el archivo '{nombre_archivo}'")
@@ -653,7 +653,7 @@ output.pack()
 def analyzeFile(filename):
     # Limpiar el widget de texto antes de mostrar nuevos resultados
     output.delete(1.0, tk.END)
-    
+
     with open(filename, 'r', encoding='utf-8') as archivo:
         entrada = archivo.read()
         resultadoLexico = ejecutar_analisis_lexico(entrada)
@@ -673,4 +673,3 @@ root.mainloop()
 
 if __name__ == "__main__":
     main()
-
